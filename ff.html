@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Test Session — Fahad Grammar High School</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..900;1,9..144,300..900&family=IBM+Plex+Mono:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#F7F2E6;
+    --board:#E9E1CE;
+    --ink:#221E17;
+    --ink-soft:rgba(34,30,23,.6);
+    --line:rgba(34,30,23,.16);
+    --grid:rgba(34,30,23,.05);
+    --red:#B3271E;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{
+    background:var(--board);color:var(--ink);
+    font-family:'Fraunces',Georgia,serif;font-optical-sizing:auto;
+    -webkit-font-smoothing:antialiased;
+  }
+  ::selection{background:var(--red);color:var(--paper)}
+
+  /* ---------- The notice sheet ---------- */
+  .sheet{
+    position:relative;max-width:1240px;margin:clamp(14px,3vw,40px) auto;
+    background:var(--paper);border:2px solid var(--ink);
+    box-shadow:0 30px 70px -35px rgba(34,30,23,.55);
+    padding:0 clamp(20px,4.5vw,58px);
+    background-image:linear-gradient(var(--grid) 1px,transparent 1px),
+                     linear-gradient(90deg,var(--grid) 1px,transparent 1px);
+    background-size:26px 26px;
+    animation:sheet .6s cubic-bezier(.2,.7,.2,1) both;
+  }
+  @keyframes sheet{from{opacity:0;transform:translateY(12px)}}
+  .pin{
+    position:absolute;top:-12px;left:50%;transform:translateX(-50%);
+    width:22px;height:22px;border-radius:50%;background:var(--red);z-index:5;
+    box-shadow:inset -3px -4px 0 rgba(0,0,0,.28),
+               inset 2px 3px 0 rgba(255,255,255,.25),
+               0 4px 6px rgba(34,30,23,.4);
+  }
+
+  /* ---------- Masthead ---------- */
+  .masthead{
+    display:flex;align-items:center;justify-content:space-between;gap:18px;flex-wrap:wrap;
+    padding:24px 0 18px;border-bottom:3px double var(--ink);
+  }
+  .brand{display:flex;align-items:center;gap:15px}
+  .brand>svg{width:46px;height:auto;flex:none}
+  .brand .st{stroke:var(--ink);fill:none}
+  .brand .fl{fill:var(--ink);stroke:none}
+  .brand-name{font-weight:700;font-size:clamp(15px,1.6vw,18px);letter-spacing:.02em;line-height:1.15}
+  .brand-sub{font:500 9.5px 'IBM Plex Mono',monospace;letter-spacing:.22em;text-transform:uppercase;color:var(--ink-soft);margin-top:4px}
+  .mast-right{display:flex;align-items:center;gap:18px;flex-wrap:wrap}
+  .clock{text-align:right;font:500 12.5px 'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums}
+  .clock .tz{display:block;font-size:9px;letter-spacing:.18em;color:var(--ink-soft);margin-top:2px}
+  .btns{display:flex;gap:9px}
+  .btn{
+    display:inline-flex;align-items:center;gap:7px;padding:8px 12px;
+    border:1.5px solid var(--ink);background:transparent;color:var(--ink);
+    font:500 10px 'IBM Plex Mono',monospace;letter-spacing:.14em;text-transform:uppercase;
+    cursor:pointer;transition:background .18s,color .18s;
+  }
+  .btn svg{width:13px;height:13px}
+  .btn:hover{background:var(--ink);color:var(--paper)}
+  .btn:active{transform:translateY(1px)}
+  .btn:disabled{opacity:.55;cursor:default}
+
+  /* ---------- Hero ---------- */
+  .hero{
+    display:grid;grid-template-columns:1.12fr .88fr;
+    gap:clamp(30px,5vw,70px);align-items:center;
+    padding:clamp(44px,6vw,74px) 0 clamp(36px,5vw,58px);
+  }
+  .hero-left{position:relative}
+  .hero-left>*{animation:rise .7s cubic-bezier(.2,.7,.2,1) both}
+  .hero-left>*:nth-child(2){animation-delay:.05s}
+  .hero-left>*:nth-child(3){animation-delay:.12s}
+  .hero-left>*:nth-child(4){animation-delay:.2s}
+  .hero-left>*:nth-child(5){animation-delay:.28s}
+  @keyframes rise{from{opacity:0;transform:translateY(16px)}}
+
+  .eyebrow{
+    font:500 10.5px 'IBM Plex Mono',monospace;letter-spacing:.24em;text-transform:uppercase;
+    color:var(--ink-soft);display:flex;align-items:center;gap:10px;
+  }
+  .eyebrow::before{content:"";width:9px;height:9px;background:var(--red);flex:none}
+  h1{
+    font-size:clamp(58px,9.6vw,132px);font-weight:900;line-height:.92;
+    letter-spacing:-.015em;margin:18px 0 16px;text-transform:uppercase;
+  }
+  .dates-note{
+    display:flex;align-items:center;gap:14px;flex-wrap:wrap;
+    color:var(--red);font-style:italic;font-weight:500;font-size:clamp(19px,2.2vw,27px);
+  }
+  .dates-note svg{width:clamp(30px,3.4vw,46px);height:auto;flex:none}
+  .dates-note .yr{
+    font:500 11px 'IBM Plex Mono',monospace;font-style:normal;letter-spacing:.14em;
+    border:1.5px solid var(--red);padding:5px 11px;border-radius:2px;color:var(--red);
+  }
+  .lede{
+    margin-top:22px;max-width:52ch;line-height:1.68;
+    font-size:clamp(15px,1.35vw,17.5px);color:rgba(34,30,23,.78);
+  }
+  .lede b{font-weight:600;color:var(--ink)}
+
+  /* rubber stamp — slams on after load */
+  .stamp{
+    position:absolute;top:-14px;right:0;width:clamp(140px,17vw,212px);
+    transform:rotate(-8deg);mix-blend-mode:multiply;opacity:.85;pointer-events:none;z-index:3;
+    animation:stampIn .34s .62s cubic-bezier(.2,1.3,.45,1) both;
+  }
+  @keyframes stampIn{
+    from{opacity:0;transform:rotate(-8deg) scale(1.7)}
+    to{opacity:.85;transform:rotate(-8deg) scale(1)}
+  }
+  .stamp rect{stroke:var(--red);fill:none}
+  .stamp text{fill:var(--red);font-family:'IBM Plex Mono',monospace}
+  .stamp .dia{fill:var(--red);stroke:none}
+
+  /* ---------- Countdown ---------- */
+  .hero-right{
+    border-left:1px solid var(--line);padding-left:clamp(26px,4vw,54px);
+    display:flex;flex-direction:column;align-items:center;text-align:center;
+    animation:rise .8s .2s cubic-bezier(.2,.7,.2,1) both;
+  }
+  .cd-label{
+    font:500 10px 'IBM Plex Mono',monospace;letter-spacing:.26em;text-transform:uppercase;
+    color:var(--ink-soft);display:flex;align-items:center;gap:10px;text-align:center;
+  }
+  .cd-label::before,.cd-label::after{content:"";width:26px;height:1px;background:var(--line);flex:none}
+
+  .day-circle{position:relative;width:min(320px,76vw);aspect-ratio:300/230;margin:8px 0 2px}
+  .loop-svg{position:absolute;inset:0;width:100%;height:100%}
+  .loop{
+    fill:none;stroke:var(--red);stroke-width:5;stroke-linecap:round;
+    stroke-dasharray:100;stroke-dashoffset:100;
+  }
+  .loop.draw{animation:draw 1.15s .15s cubic-bezier(.6,0,.25,1) forwards}
+  @keyframes draw{to{stroke-dashoffset:0}}
+  .dc-inner{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px}
+  .dc-num{font-size:clamp(76px,8.5vw,118px);font-weight:800;line-height:1;color:var(--red)}
+  .dc-unit{font:600 10.5px 'IBM Plex Mono',monospace;letter-spacing:.4em;text-transform:uppercase;color:var(--ink-soft);margin-left:.4em}
+
+  .hms{display:flex;align-items:flex-start;gap:12px;margin-top:10px}
+  .hm{display:flex;flex-direction:column;align-items:center;gap:6px}
+  .pair{
+    display:inline-block;min-width:2.1ch;text-align:center;
+    font:600 clamp(30px,3.4vw,44px)/1 'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums;
+  }
+  .pair.tick{animation:tick .3s ease}
+  @keyframes tick{from{transform:translateY(.32em);opacity:.2}}
+  .hm-l{font:500 8.5px 'IBM Plex Mono',monospace;letter-spacing:.3em;color:var(--ink-soft)}
+  .colon{font:600 clamp(26px,3vw,38px)/1 'IBM Plex Mono',monospace;color:var(--red);transform:translateY(.05em);animation:blink 1s steps(1) infinite}
+  @keyframes blink{0%,49%{opacity:1}50%,100%{opacity:.15}}
+  .target-line{margin-top:18px;font:500 10.5px 'IBM Plex Mono',monospace;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-soft)}
+  .target-line b{color:var(--red);font-weight:600;margin-right:8px}
+
+  /* ---------- Sections ---------- */
+  .sec{padding:clamp(28px,4vw,46px) 0 0}
+  .sec-head{
+    display:flex;align-items:center;gap:14px;flex-wrap:wrap;
+    border-bottom:1px solid var(--line);padding-bottom:13px;margin-bottom:22px;
+  }
+  .sec-num{font:600 11px 'IBM Plex Mono',monospace;color:var(--red)}
+  .sec-title{font:600 11.5px 'IBM Plex Mono',monospace;letter-spacing:.22em;text-transform:uppercase}
+  .sec-read{margin-left:auto;font:500 11px 'IBM Plex Mono',monospace;letter-spacing:.1em;color:var(--ink-soft);white-space:nowrap}
+
+  /* session map */
+  .map-scroll{overflow-x:auto;padding-bottom:6px}
+  .strip{display:flex;gap:10px;min-width:680px}
+  .m-group{display:flex;flex-direction:column}
+  .m-label{
+    display:flex;justify-content:space-between;gap:6px;padding:0 0 8px 1px;
+    font:500 9px 'IBM Plex Mono',monospace;letter-spacing:.14em;color:var(--ink-soft);
+  }
+  .m-label i{font-style:normal;opacity:.65}
+  .m-cells{display:flex;gap:2px;flex:1}
+  .cell{
+    flex:1;min-width:0;height:36px;position:relative;cursor:pointer;
+    border-bottom:2px solid var(--ink);transition:transform .15s;
+  }
+  .cell:hover{transform:scaleY(1.18);transform-origin:bottom}
+  .cell.past{background:repeating-linear-gradient(45deg,rgba(34,30,23,.55) 0 1px,transparent 1px 4.5px)}
+  .cell.future::after{
+    content:"";position:absolute;left:50%;top:50%;width:3px;height:3px;border-radius:50%;
+    background:rgba(34,30,23,.3);transform:translate(-50%,-50%);
+  }
+  .cell.today{background:var(--red);border-bottom-color:var(--red);animation:pulse 2.2s infinite}
+  .cell.today::after{display:none}
+  @keyframes pulse{
+    0%{box-shadow:0 0 0 0 rgba(179,39,30,.4)}
+    70%{box-shadow:0 0 0 7px rgba(179,39,30,0)}
+    100%{box-shadow:0 0 0 0 rgba(179,39,30,0)}
+  }
+  .legend{display:flex;gap:22px;margin-top:14px;flex-wrap:wrap}
+  .lg{display:flex;align-items:center;gap:8px;font:500 9.5px 'IBM Plex Mono',monospace;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-soft)}
+  .sw{width:13px;height:13px;border-bottom:2px solid var(--ink);flex:none}
+  .sw.past{background:repeating-linear-gradient(45deg,rgba(34,30,23,.55) 0 1px,transparent 1px 4.5px)}
+  .sw.today{background:var(--red);border-bottom-color:var(--red)}
+
+  /* floating tooltip */
+  .tooltip{
+    position:fixed;z-index:50;pointer-events:none;white-space:nowrap;
+    background:var(--paper);border:1.5px solid var(--ink);
+    box-shadow:3px 4px 0 rgba(34,30,23,.18);padding:9px 12px;
+    display:flex;flex-direction:column;gap:3px;
+    transform:translate(-50%,calc(-100% - 10px)) scale(.92);opacity:0;
+    transition:opacity .15s,transform .15s;
+  }
+  .tooltip.show{opacity:1;transform:translate(-50%,calc(-100% - 10px)) scale(1)}
+  .tooltip b{font-size:12.5px;font-weight:600}
+  .tooltip span{font:500 9.5px 'IBM Plex Mono',monospace;letter-spacing:.14em;color:var(--red);text-transform:uppercase}
+
+  /* particulars — styled like a filled-in form */
+  .rows{max-width:860px}
+  .row{display:flex;align-items:baseline;gap:14px;padding:15px 6px;transition:background .15s}
+  .row:hover{background:rgba(34,30,23,.035)}
+  .row .k{font:500 10px 'IBM Plex Mono',monospace;letter-spacing:.2em;text-transform:uppercase;color:var(--ink-soft);flex:none}
+  .row .leader{flex:1;min-width:30px;border-bottom:2px dotted rgba(34,30,23,.35);transform:translateY(-4px)}
+  .row .v{font-size:17px;font-weight:500;text-align:right}
+  .row .v.note{font-style:italic;color:var(--red)}
+
+  /* luck line + footer */
+  .luck{text-align:center;padding:clamp(30px,4vw,48px) 0 6px}
+  .luck em{font-style:italic;font-weight:500;font-size:clamp(17px,2vw,23px);color:var(--red)}
+  .luck span{display:block;margin-top:9px;font:500 9px 'IBM Plex Mono',monospace;letter-spacing:.24em;text-transform:uppercase;color:var(--ink-soft)}
+  footer{
+    margin-top:clamp(26px,4vw,40px);border-top:3px double var(--ink);
+    padding:16px 0 26px;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;
+    font:500 9.5px 'IBM Plex Mono',monospace;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-soft);
+  }
+
+  /* ---------- Responsive ---------- */
+  @media(max-width:940px){
+    .hero{grid-template-columns:1fr;gap:44px}
+    .hero-right{border-left:none;border-top:1px solid var(--line);padding:38px 0 0}
+    .stamp{top:-22px;right:-4px}
+  }
+  @media(max-width:600px){
+    .clock{display:none}
+    .btn{padding:7px 9px}
+    .row .v{font-size:15px}
+  }
+
+  /* ---------- Print ---------- */
+  @media print{
+    body{background:#fff}
+    .sheet{box-shadow:none;margin:0;animation:none}
+    .pin,.btns,.tooltip{display:none!important}
+    .cell.today,.loop{animation:none}
+    .loop{stroke-dashoffset:0}
+    .hero-left>*,.hero-right,.stamp{animation:none;opacity:1}
+  }
+</style>
+</head>
+<body>
+
+<div class="sheet">
+  <span class="pin" aria-hidden="true"></span>
+
+  <!-- Masthead -->
+  <header class="masthead">
+    <div class="brand">
+      <svg viewBox="0 0 60 68" aria-hidden="true">
+        <path class="st" d="M30 2 L56 9 V32 C56 50 45 61 30 66 C15 61 4 50 4 32 V9 Z" stroke-width="2.5" stroke-linejoin="round"/>
+        <path class="st" d="M17 30 C22 26.5 27 26.5 30 29.5 C33 26.5 38 26.5 43 30 L43 43 C38 39.5 33 39.5 30 42.5 C27 39.5 22 39.5 17 43 Z" stroke-width="1.8" stroke-linejoin="round"/>
+        <path class="st" d="M30 29.5 V42.5" stroke-width="1.2"/>
+        <text class="fl" x="30" y="58" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="8" font-weight="600" letter-spacing="1.5">FGHS</text>
+      </svg>
+      <div>
+        <div class="brand-name">Fahad Grammar High School</div>
+        <div class="brand-sub">Office of Examinations &middot; Test Session Notice</div>
+      </div>
+    </div>
+    <div class="mast-right">
+      <div class="clock">
+        <span id="clock">--:--:--</span>
+        <span class="tz" id="tz">LOCAL TIME</span>
+      </div>
+      <div class="btns">
+        <button class="btn" id="btn-ics" type="button">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 9h18M8 3v4M16 3v4M12 12.5v5M9.5 15h5"/></svg>
+          <span>Add to Calendar</span>
+        </button>
+        <button class="btn" id="btn-print" type="button">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M7 8V3h10v5M7 16H3v-6a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v6h-4"/><path d="M7 13h10v8H7z"/></svg>
+          <span>Print</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <!-- Hero -->
+    <section class="hero">
+      <div class="hero-left">
+        <!-- rubber stamp -->
+        <div class="stamp" aria-hidden="true">
+          <svg viewBox="0 0 280 122">
+            <filter id="rough"><feTurbulence type="fractalNoise" baseFrequency="0.55" numOctaves="2" seed="7" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.6"/></filter>
+            <g filter="url(#rough)">
+              <rect x="4" y="4" width="272" height="114" rx="10" stroke-width="3"/>
+              <rect x="13" y="13" width="254" height="96" rx="6" stroke-width="1.5"/>
+              <rect class="dia" x="22" y="33" width="6" height="6" transform="rotate(45 25 36)"/>
+              <rect class="dia" x="252" y="33" width="6" height="6" transform="rotate(45 255 36)"/>
+              <text x="140" y="41" text-anchor="middle" font-size="10" letter-spacing="2.5" font-weight="500">OFFICE OF EXAMINATIONS</text>
+              <text x="140" y="74" text-anchor="middle" font-size="29" letter-spacing="9" font-weight="600">OFFICIAL</text>
+              <text x="140" y="98" text-anchor="middle" font-size="10" letter-spacing="2.5" font-weight="500">FAHAD GRAMMAR HIGH SCHOOL</text>
+            </g>
+          </svg>
+        </div>
+
+        <p class="eyebrow">Official Notice &middot; Annual Examination</p>
+        <h1>Test<br>Session</h1>
+
+        <p class="dates-note">
+          <span>15 November</span>
+          <svg viewBox="0 0 44 10" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M0 5 H40 M34 1.5 40 5 34 8.5"/></svg>
+          <span>15 February</span>
+          <em class="yr" id="session-year">&mdash;</em>
+        </p>
+
+        <p class="lede">
+          The annual test session of <b>Fahad Grammar High School</b> runs from
+          <b>15 November</b> to <b>15 February</b>. Every student must appear as per the
+          date sheet notified by the Office of Examinations. Keep this notice safe &mdash;
+          it is your official record of the session.
+        </p>
+      </div>
+
+      <!-- Countdown -->
+      <div class="hero-right">
+        <p class="cd-label"><span id="cd-label">Countdown &mdash; to commencement</span></p>
+
+        <div class="day-circle" role="timer" aria-label="Countdown to the test session">
+          <svg class="loop-svg" viewBox="0 0 300 230" aria-hidden="true">
+            <path id="loop" class="loop" pathLength="100"
+              d="M150 26 C235 22 283 62 281 114 C279 168 212 205 141 203 C70 201 17 162 19 110 C21 60 82 30 154 27 C214 24 258 52 262 96"/>
+          </svg>
+          <div class="dc-inner">
+            <span class="dc-num" id="days">&ndash;</span>
+            <span class="dc-unit">Days</span>
+          </div>
+        </div>
+
+        <div class="hms" aria-hidden="true">
+          <div class="hm"><span class="pair" id="hh">00</span><span class="hm-l">HRS</span></div>
+          <span class="colon">:</span>
+          <div class="hm"><span class="pair" id="mm">00</span><span class="hm-l">MIN</span></div>
+          <span class="colon">:</span>
+          <div class="hm"><span class="pair" id="ss">00</span><span class="hm-l">SEC</span></div>
+        </div>
+
+        <p class="target-line"><b>&rarr;</b><span id="target-text">resolving session&hellip;</span></p>
+      </div>
+    </section>
+
+    <!-- Session map -->
+    <section class="sec">
+      <div class="sec-head">
+        <span class="sec-num">01</span>
+        <span class="sec-title">Session Map &middot; Day by Day</span>
+        <span class="sec-read" id="ro">&mdash;</span>
+      </div>
+      <div class="map-scroll">
+        <div class="strip" id="strip" aria-label="Day-by-day map of the test session"></div>
+      </div>
+      <div class="legend">
+        <span class="lg"><span class="sw past"></span>Elapsed</span>
+        <span class="lg"><span class="sw today"></span>Today</span>
+        <span class="lg"><span class="sw"></span>Remaining</span>
+      </div>
+    </section>
+
+    <!-- Particulars -->
+    <section class="sec">
+      <div class="sec-head">
+        <span class="sec-num">02</span>
+        <span class="sec-title">Particulars of Session</span>
+      </div>
+      <div class="rows">
+        <div class="row"><span class="k">Institute</span><span class="leader"></span><span class="v">Fahad Grammar High School</span></div>
+        <div class="row"><span class="k">Session</span><span class="leader"></span><span class="v" id="v-window">&mdash;</span></div>
+        <div class="row"><span class="k">Commences</span><span class="leader"></span><span class="v" id="v-opens">&mdash;</span></div>
+        <div class="row"><span class="k">Concludes</span><span class="leader"></span><span class="v" id="v-closes">&mdash;</span></div>
+        <div class="row"><span class="k">Total Duration</span><span class="leader"></span><span class="v" id="v-duration">&mdash;</span></div>
+        <div class="row"><span class="k">Issued</span><span class="leader"></span><span class="v" id="v-issued">&mdash;</span></div>
+        <div class="row"><span class="k">Status</span><span class="leader"></span><span class="v note" id="v-status">&mdash;</span></div>
+      </div>
+    </section>
+
+    <p class="luck">
+      <em>Best of luck to all candidates.</em>
+      <span>&mdash; The Examination Wing</span>
+    </p>
+  </main>
+
+  <footer>
+    <span id="ref">REF: &mdash;</span>
+    <span>Fahad Grammar High School &middot; Test Session Portal</span>
+  </footer>
+</div>
+
+<!-- floating tooltip for the day map -->
+<div class="tooltip" id="tooltip"><b class="t-date"></b><span class="t-day"></span></div>
+
+<script>
+(function(){
+"use strict";
+const DAY = 86400000;
+const MONTHS = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+const pad = n => String(n).padStart(2,"0");
+const $  = id => document.getElementById(id);
+const at = (y,m,d) => new Date(y,m,d,0,0,0,0);
+const long  = d => d.toLocaleDateString("en-GB",{weekday:"long",day:"numeric",month:"long",year:"numeric"});
+const short = d => d.getDate()+" "+MONTHS[d.getMonth()]+" "+d.getFullYear();
+
+/* The session always spans 15 Nov -> 15 Feb; resolve which cycle we are in */
+function resolveSession(now){
+  const y = now.getFullYear();
+  for(const sy of [y-1, y, y+1]){
+    const start = at(sy,10,15), end = at(sy+1,1,15), endX = at(sy+1,1,16);
+    if(now >= start && now < endX) return {start, end, endX, phase:"during"};
+  }
+  for(const sy of [y-1, y, y+1]){
+    const start = at(sy,10,15), end = at(sy+1,1,15), endX = at(sy+1,1,16);
+    if(now < start) return {start, end, endX, phase:"before"};
+  }
+  return null;
+}
+const yLabel    = s => s.start.getFullYear() + "\u2013" + String(s.end.getFullYear()).slice(2);
+const totalDays = s => Math.round((s.endX - s.start) / DAY);   /* 93 days, inclusive */
+
+let session = null, lastCellDay = null, lastDays = null;
+
+/* ---- build the 93-cell day strip, grouped by month ---- */
+function buildMap(s){
+  const strip = $("strip"); strip.innerHTML = "";
+  const total = totalDays(s);
+  const groups = [];
+  const d = new Date(s.start);
+  for(let i=0;i<total;i++){
+    const key = d.getMonth()+"-"+d.getFullYear();
+    let g = groups[groups.length-1];
+    if(!g || g.key !== key){
+      g = {key, name: MONTHS[d.getMonth()].toUpperCase()+" \u2019"+String(d.getFullYear()).slice(2), count:0};
+      groups.push(g);
+    }
+    g.count++; d.setDate(d.getDate()+1);
+  }
+  let idx = 0;
+  groups.forEach(g=>{
+    const grp = document.createElement("div"); grp.className = "m-group"; grp.style.flexGrow = g.count;
+    const lab = document.createElement("div"); lab.className = "m-label";
+    lab.innerHTML = "<span>"+g.name+"</span><i>"+g.count+"</i>";
+    const cells = document.createElement("div"); cells.className = "m-cells";
+    for(let k=0;k<g.count;k++){
+      const c = document.createElement("div"); c.className = "cell"; c.dataset.i = idx++;
+      cells.appendChild(c);
+    }
+    grp.appendChild(lab); grp.appendChild(cells); strip.appendChild(grp);
+  });
+}
+
+/* ---- paint elapsed / today / remaining states ---- */
+function paintCells(s){
+  const now = new Date();
+  const today = at(now.getFullYear(), now.getMonth(), now.getDate());
+  $("strip").querySelectorAll(".cell").forEach(c=>{
+    const dd = new Date(s.start); dd.setDate(dd.getDate() + (+c.dataset.i));
+    c.classList.toggle("past",  dd < today);
+    c.classList.toggle("today", dd.getTime() === today.getTime());
+    c.classList.toggle("future",dd > today);
+  });
+}
+
+/* ---- progress readout + status line ---- */
+function updateReadout(now){
+  const s = session, total = totalDays(s);
+  if(s.phase === "before"){
+    const d = Math.floor((s.start - now) / DAY);
+    $("ro").textContent = "OPENS IN "+d+" DAYS \u00B7 0% ELAPSED";
+    $("v-status").textContent = "Not yet commenced \u2014 opens in "+d+" days";
+  }else{
+    const dayN = Math.floor((now - s.start) / DAY) + 1;
+    const pct  = Math.min(100,(now - s.start) / (s.endX - s.start) * 100).toFixed(1);
+    $("ro").textContent = "DAY "+dayN+" OF "+total+" \u00B7 "+pct+"% ELAPSED";
+    $("v-status").textContent = "In progress \u2014 Day "+dayN+" of "+total;
+  }
+}
+
+/* ---- fill in all session-dependent text ---- */
+function sessionChanged(s){
+  $("session-year").textContent = yLabel(s);
+  $("cd-label").textContent = s.phase === "during"
+    ? "Countdown \u2014 to conclusion" : "Countdown \u2014 to commencement";
+  $("target-text").textContent = (s.phase === "during" ? "Concludes " : "Commences ")
+    + long(s.phase === "during" ? s.end : s.start);
+  $("v-window").textContent   = short(s.start)+" \u2014 "+short(s.end);
+  $("v-opens").textContent    = long(s.start);
+  $("v-closes").textContent   = long(s.end);
+  $("v-duration").textContent = totalDays(s)+" days (inclusive)";
+  $("ref").textContent        = "REF: FGHS/EXAM/"+yLabel(s).replace("\u2013","-")+"/TS-01";
+  buildMap(s);
+  lastCellDay = null;
+}
+
+/* ---- ticking helpers ---- */
+function setPair(el, v){
+  if(el.textContent !== v){
+    el.textContent = v;
+    el.classList.remove("tick"); void el.offsetWidth; el.classList.add("tick");
+  }
+}
+function redrawCircle(){
+  const p = $("loop");
+  p.classList.remove("draw"); void p.getBoundingClientRect(); p.classList.add("draw");
+}
+
+/* ---- master loop ---- */
+function tick(){
+  const now = new Date();
+  $("clock").textContent = now.toLocaleTimeString("en-GB",{hour12:false});
+  const s = resolveSession(now);
+  if(s && (!session || session.start.getTime() !== s.start.getTime())){ session = s; sessionChanged(s); }
+  if(!session) return;
+
+  const target = session.phase === "during" ? session.endX : session.start;
+  const diff = Math.max(0, target - now);
+  const days = Math.floor(diff / DAY);
+  setPair($("hh"), pad(Math.floor(diff % DAY / 3600000)));
+  setPair($("mm"), pad(Math.floor(diff % 3600000 / 60000)));
+  setPair($("ss"), pad(Math.floor(diff % 60000 / 1000)));
+  if(days !== lastDays){ lastDays = days; $("days").textContent = days; redrawCircle(); }
+
+  const dk = now.toDateString();
+  if(dk !== lastCellDay){ lastCellDay = dk; paintCells(session); }
+  updateReadout(now);
+}
+
+/* ---- tooltip on the day map ---- */
+const tip = $("tooltip"), stripEl = $("strip");
+stripEl.addEventListener("pointerover", e=>{
+  const c = e.target.closest(".cell"); if(!c || !session) return;
+  const i = +c.dataset.i, total = totalDays(session);
+  const d = new Date(session.start); d.setDate(d.getDate() + i);
+  tip.querySelector(".t-date").textContent = d.toLocaleDateString("en-GB",{weekday:"short",day:"numeric",month:"short",year:"numeric"});
+  tip.querySelector(".t-day").textContent  = "Day "+(i+1)+" of "+total;
+  const r = c.getBoundingClientRect();
+  tip.style.left = (r.left + r.width/2)+"px";
+  tip.style.top  = r.top+"px";
+  tip.classList.add("show");
+});
+stripEl.addEventListener("pointerout", e=>{
+  if(!e.relatedTarget || !e.relatedTarget.closest(".cell")) tip.classList.remove("show");
+});
+window.addEventListener("scroll", ()=>tip.classList.remove("show"), {passive:true});
+
+/* ---- add-to-calendar (.ics generated in the browser) ---- */
+ $("btn-ics").addEventListener("click", ()=>{
+  if(!session) return;
+  const s = session;
+  const f = d => d.getFullYear()+pad(d.getMonth()+1)+pad(d.getDate());
+  const lines = [
+    "BEGIN:VCALENDAR","VERSION:2.0",
+    "PRODID:-//Fahad Grammar High School//Test Session//EN",
+    "BEGIN:VEVENT",
+    "UID:ts-"+Date.now()+"@fghs.exam",
+    "DTSTAMP:"+f(new Date())+"T000000",
+    "DTSTART;VALUE=DATE:"+f(s.start),
+    "DTEND;VALUE=DATE:"+f(s.endX),
+    "SUMMARY:Test Session - Fahad Grammar High School",
+    "DESCRIPTION:Annual test session "+yLabel(s)+" (15 November to 15 February). Issued by the Office of Examinations.",
+    "END:VEVENT","END:VCALENDAR"
+  ];
+  const blob = new Blob([lines.join("\r\n")], {type:"text/calendar;charset=utf-8"});
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = "FGHS-Test-Session-"+yLabel(s).replace("\u2013","-")+".ics";
+  document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(()=>URL.revokeObjectURL(a.href), 1000);
+  const lbl = $("btn-ics").querySelector("span"), old = lbl.textContent;
+  lbl.textContent = "Saved"; $("btn-ics").disabled = true;
+  setTimeout(()=>{ lbl.textContent = old; $("btn-ics").disabled = false; }, 1600);
+});
+ $("btn-print").addEventListener("click", ()=>window.print());
+
+/* ---- timezone label + issue date ---- */
+try{
+  $("tz").textContent = Intl.DateTimeFormat().resolvedOptions().timeZone.split("/").pop().replace(/_/g," ").toUpperCase();
+}catch(e){ $("tz").textContent = "LOCAL TIME"; }
+ $("v-issued").textContent = new Date().toLocaleDateString("en-GB",{day:"numeric",month:"long",year:"numeric"});
+
+tick();
+setInterval(tick, 250);
+})();
+</script>
+</body>
+</html>
